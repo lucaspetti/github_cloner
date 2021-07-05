@@ -20,8 +20,8 @@ import (
 	"net/http"
 	"io/ioutil"
 	"encoding/json"
-	"os/exec"
 
+	"github_cloner/cloner"
 	"github.com/spf13/cobra"
 	// "github.com/google/go-github/github"
 )
@@ -117,20 +117,20 @@ func cloneRepos(repos []Repo) {
 		if cloneProj == "y" {
 			sshURL := repo.SSHURL
 			fmt.Println("Cloning...")
-			cloneRepo(sshURL, path)
-			fmt.Println("Cloned", repo.Name)
+			cloneRepo(sshURL)
+			fmt.Printf("Cloned %s into %s \n", repo.Name, path)
 		} else if cloneProj == "q" {
 			return
 		}
 	}
 }
 
-func cloneRepo(url, path string) {
-	cmd := exec.Command("git", "clone", url)
-	cmd.Dir = path
+func cloneRepo(url string) {
+	repoCloner := cloner.CloneCommander{}
+	out, err := repoCloner.CloneRepo(url, path)
 
-	err := cmd.Run()
 	if err != nil {
 		fmt.Printf("Could not clone project to given path: %v \n", err)
+		fmt.Printf(string(out))
 	}
 }
