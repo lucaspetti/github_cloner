@@ -20,6 +20,7 @@ import (
 	"net/http"
 
 	"github_cloner/cloner"
+	"github_cloner/config"
 	"github_cloner/repositories"
 
 	"github.com/spf13/cobra"
@@ -39,7 +40,7 @@ var cloneCmd = &cobra.Command{
 		}
 
 		fmt.Println("Getting repos for", username)
-		baseUrl := "https://api.github.com/users/"
+		baseUrl := config.GithubAPI
 
 		reposGetter := repositories.NewRepositoryDataFetcher(baseUrl, http.DefaultClient)
 		repos, err := reposGetter.GetUserRepos(username)
